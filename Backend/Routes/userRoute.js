@@ -43,6 +43,34 @@ router.post('/signup', (req, res) => {
 });
 
 
+router.get("/data", async (req, res) => {
+  try {
+    // const name = req.query.name;
+    // const title = req.query.title;
+    const db = getDatabase();
+    let datas = ref(db, "userdata");
+
+    console.log("datas",datas)
+
+    // if (name && title) {
+    //   datas = query(datas, orderByChild("name"),equalTo(name));
+    //   datas = query(datas, orderByChild("title"),equalTo(title));
+    // } else if (name) {
+    //   datas = query(datas, orderByChild("name"),equalTo(name));
+    // } else if (title) {
+    //   datas = query(datas, orderByChild("title"),equalTo(title));
+    // }
+
+    const snapshot = await get(datas);
+    const data = snapshot.val();
+    res.send(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred while retrieving data from the database.");
+  }
+});
+
+
   
   
  
