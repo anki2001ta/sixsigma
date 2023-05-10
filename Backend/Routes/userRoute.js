@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const admin = require('../Configuration/firebaseConfig');
+
 const { getAuth, signInWithEmailAndPassword } = require ("firebase/auth");
 const { initializeApp } = require ("firebase/app")
 const authMiddleware = require('../Middleware/middleware');
@@ -90,9 +91,51 @@ router.post('/login', async (req, res) => {
     res.status(200).send({ token: customToken });
   } catch (error) {
     console.log('Error authenticating user:', error);
-    res.status(500).send({ message: 'Error authenticating user' });
+    res.status(500).send({ message: 'Error authenticating user' })
   }
+})
+router.post('/signup', (req, res) => {
+    const { email, password, displayName, courses="",completed="" } = req.body;
+    admin.auth().createUser({
+      email,
+      password,
+      displayName
+    }).then((userRecord) => {
+      const db = admin.database();
+      const userRef = db.ref('users').child(userRecord.uid);
+    
+      const userData = {
+        email: userRecord.email,
+        name: userRecord.displayName,
+       
+      };
+    
+      if (Array.isArray(courses,completed)) {
+        userData.courses = {};
+        courses.forEach((course, index) => {
+          userData.courses[`course${index+1}`] = course;
+        });
+      } else {
+        userData.courses = courses;
+        userData.courses = completed;
+      }
+    
+      userRef.set(userData).then(() => {
+        console.log('User data saved successfully');
+        res.status(201).send({ message: 'User created successfully' });
+      }).catch((error) => {
+        console.log('Error saving user data:', error);
+        res.status(500).send({ message: 'Error saving user data' });
+      });
+    }).catch((error) => {
+      console.log('Error creating user:', error);
+      res.status(500).send({ message: 'Error creating user' });
+    });
+  
 });
+
+
+
 
 
 
@@ -133,7 +176,7 @@ router.get('/dashboard/:uid', (req, res) => {
 
 
 
-  
+
   
  
   
@@ -145,15 +188,35 @@ router.get('/dashboard/:uid', (req, res) => {
   
   
 
+  
+
+
+
+router.get('/dashboard', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  const db = admin.database();
+  const userRef = db.ref('users').child(req.session.user.uid);
+  userRef.once('value', (snapshot) => {
+    const userData = snapshot.val();
+    res.render('dashboard', { userData });
+  }, (error) => {
+    console.log('Error fetching user data:', error);
+    res.status(500).send({ message: 'Error fetching user data' });
+  });
+});
 
 
 
 
+  
 
-
-
+  
+  module.exports=router
 
     
 
 
-module.exports = router;
+
+
