@@ -1,64 +1,116 @@
 import { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import { useRouter } from "next/router";
+import axios from "axios";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: "100vh",
-    backgroundColor: "#f8f8f8",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "20px",
-    backgroundColor: "#ffffff",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.2)",
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
+import styles from "@/styles/Signup.module.css";
 
-const SignUp = () => {
-  const classes = useStyles();
+const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [courses, setCourses] = useState("");
+  const [completed, setCompleted] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Your sign-in logic here
-    console.log(email, password);
+  const router = useRouter();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:5000/signup", {
+        email,
+        password,
+        displayName,
+        courses,
+        completed,
+      });
+      console.log("response", response);
+      router.push("/login");
+      localStorage.setItem("uid", response.data.uid);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <div className={classes.root}>
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <TextField
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button variant="contained" color="primary" type="submit">
-          Sign In
-        </Button>
+    <div className={styles.container}>
+      <form className={styles.main} onSubmit={handleSubmit}>
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="email">
+            Email:
+          </label>
+
+          <input
+            className={styles.input}
+            type="email"
+            id="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
+        </div>
+
+        <div  className={styles.formGroup}>
+          <label className={styles.label} htmlFor="password">
+            Password:
+          </label>
+
+          <input
+            className={styles.input}
+            type="password"
+            id="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="displayName">
+            Display Name:
+          </label>
+
+          <input
+            className={styles.input}
+            type="text"
+            id="displayName"
+            value={displayName}
+            onChange={(event) => setDisplayName(event.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="courses">
+            Courses:
+          </label>
+
+          <input
+            className={styles.input}
+            type="text"
+            id="courses"
+            value={courses}
+            onChange={(event) => setCourses(event.target.value)}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="completed">
+            Completed:
+          </label>
+
+          <input
+            className={styles.input}
+            type="text"
+            id="completed"
+            value={completed}
+            onChange={(event) => setCompleted(event.target.value)}
+          />
+        </div>
+
+        <button className={styles.signup_button} type="submit">Submit</button>
       </form>
     </div>
   );
 };
 
-export default SignUp;
+export default SignupForm;
