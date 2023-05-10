@@ -98,7 +98,7 @@ export default function Signup() {
         />
       </div>
 
-      <button type="submit" className={styles.signup_button}>
+      <button type="submit" className={styles.signup_button} >
         Sign Up
       </button>
 
