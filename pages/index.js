@@ -17,10 +17,7 @@ export default function Index() {
         <meta name="description" content="Sign up for our website" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Login/>
-
-      
+      <OrgSignup/>
     </div>
   );
 }

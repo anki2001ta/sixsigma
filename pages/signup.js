@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -5,29 +6,64 @@ import axios from "axios";
 import styles from "@/styles/Signup.module.css";
 
 const SignupForm = () => {
+  const [issuer, setIssuer] = useState("");
+  const [issuerId, setIssuerId] = useState("");
+  const [courseName, setCourseName] = useState("");
+  const [courseId, setCourseId] = useState("");
+  const [courseTemplate, setCourseTemplate] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [userId, setUserId] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [courses, setCourses] = useState("");
   const [completed, setCompleted] = useState("");
+  const [url, setUrl] = useState("");
 
   const router = useRouter();
+
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   try {
+  //     const response = await axios.post("http://localhost:5000/signup", {
+  //       email,
+  //       password,
+  //       displayName,
+  //       courses,
+  //       completed,
+  //     });
+  //     console.log("response", response);
+  //     router.push("/login");
+  //     localStorage.setItem("uid", response.data.uid);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/signup", {
+      const response = await axios.post("http://localhost:4500/data", {
+        issuer,
+        issuerId,
+        courseName,
+        courseId,
+        courseTemplate,
         email,
-        password,
         displayName,
-        courses,
+        userId,
         completed,
       });
-      console.log("response", response);
-      router.push("/login");
-      localStorage.setItem("uid", response.data.uid);
+
+      // const res = await axios.get("http://localhost:4500/data").then((res) => {
+      //   console.log("res",res);
+      // });
+
+      console.log("response", response.data);
+      setUrl(response.data.alldata.url)
+      // console.log("res", res.data);
+
+      // router.push("/login");
+      // localStorage.setItem("uid", response.data.uid);
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
     }
   };
 
@@ -35,8 +71,83 @@ const SignupForm = () => {
     <div className={styles.container}>
       <form className={styles.main} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="issuer">
+            Issuer:
+          </label>
+
+          <input
+            className={styles.input}
+            type="text"
+            id="issuer"
+            value={issuer}
+            onChange={(event) => setIssuer(event.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="issuer">
+            Issuer Id:
+          </label>
+
+          <input
+            className={styles.input}
+            type="text"
+            id="issuerid"
+            value={issuerId}
+            onChange={(event) => setIssuerId(event.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="issuer">
+            course Name:
+          </label>
+
+          <input
+            className={styles.input}
+            type="text"
+            id="issuer"
+            value={courseName}
+            onChange={(event) => setCourseName(event.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="issuer">
+            course Id:
+          </label>
+
+          <input
+            className={styles.input}
+            type="text"
+            id="issuer"
+            value={courseId}
+            onChange={(event) => setCourseId(event.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="issuerid">
+            course Template:
+          </label>
+
+          <input
+            className={styles.input}
+            type="text"
+            id="issuerid"
+            value={courseTemplate}
+            onChange={(event) => setCourseTemplate(event.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
           <label className={styles.label} htmlFor="email">
-            Email:
+            email
           </label>
 
           <input
@@ -49,53 +160,38 @@ const SignupForm = () => {
           />
         </div>
 
-        <div  className={styles.formGroup}>
-          <label className={styles.label} htmlFor="password">
-            Password:
-          </label>
-
-          <input
-            className={styles.input}
-            type="password"
-            id="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label} htmlFor="displayName">
-            Display Name:
+            user id:
           </label>
 
           <input
             className={styles.input}
             type="text"
             id="displayName"
-            value={displayName}
-            onChange={(event) => setDisplayName(event.target.value)}
+            value={userId}
+            onChange={(event) => setUserId(event.target.value)}
             required
           />
         </div>
 
         <div className={styles.formGroup}>
           <label className={styles.label} htmlFor="courses">
-            Courses:
+            Name:
           </label>
 
           <input
             className={styles.input}
             type="text"
-            id="courses"
-            value={courses}
-            onChange={(event) => setCourses(event.target.value)}
+            id="coursesname"
+            value={displayName}
+            onChange={(event) => setDisplayName(event.target.value)}
           />
         </div>
 
         <div className={styles.formGroup}>
           <label className={styles.label} htmlFor="completed">
-            Completed:
+            Date of Completion:
           </label>
 
           <input
@@ -107,7 +203,19 @@ const SignupForm = () => {
           />
         </div>
 
-        <button className={styles.signup_button} type="submit">Submit</button>
+        <button
+          className={styles.signup_button}
+          type="submit"
+          // onClick={handleReq}
+        >
+          Request
+        </button>
+        <Link className=""
+          target="_blank"
+          href={`http://localhost:3000/certificate/${issuerId}/${courseId}/${courseTemplate}/?&issuerId=${issuerId}&displayName=${displayName}&courseId=${courseId}&courseName=${courseName}&date=${completed}&email=${email}&url=${url}`}
+          >
+          {`http://localhost:3000/certification/${issuerId}/${courseId}`}
+        </Link>
       </form>
     </div>
   );
