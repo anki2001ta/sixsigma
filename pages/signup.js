@@ -15,9 +15,11 @@ const SignupForm = () => {
   const [userId, setUserId] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [completed, setCompleted] = useState("");
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState();
+  const [data, setData] = useState();
+  const [showUrl, setShowUrl] = useState(false);
 
-  const router = useRouter();
+  // const router = useRouter();
 
   // const handleSubmit = async (event) => {
   //   event.preventDefault();
@@ -40,28 +42,27 @@ const SignupForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4500/data", {
-        issuer,
-        issuerId,
-        courseName,
-        courseId,
-        courseTemplate,
-        email,
-        displayName,
-        userId,
-        completed,
-      });
-
-      // const res = await axios.get("http://localhost:4500/data").then((res) => {
-      //   console.log("res",res);
-      // });
-
-      console.log("response", response.data);
-      setUrl(response.data.alldata.url)
-      // console.log("res", res.data);
-
-      // router.push("/login");
-      // localStorage.setItem("uid", response.data.uid);
+      await axios
+        .post("http://localhost:4500/data", {
+          issuer,
+          issuerId,
+          courseName,
+          courseId,
+          courseTemplate,
+          email,
+          displayName,
+          userId,
+          completed,
+        })
+        .then((res) => {
+          if (res) {
+            setShowUrl(true);
+          }
+          // console.log("res.data.alldata", res.data.alldata);
+          setData(res.data.alldata);
+          console.log("res.data.alldata.url", res.data.alldata.url);
+          setUrl(res.data.alldata.url);
+        });
     } catch (error) {
       console.log("error", error);
     }
@@ -210,12 +211,20 @@ const SignupForm = () => {
         >
           Request
         </button>
-        <Link className=""
-          target="_blank"
-          href={`http://localhost:3000/certificate/${issuerId}/${courseId}/${courseTemplate}/?&issuerId=${issuerId}&displayName=${displayName}&courseId=${courseId}&courseName=${courseName}&date=${completed}&email=${email}&url=${url}`}
+        {showUrl ? (
+          <Link
+            className={styles.signup_button}
+            target="_blank"
+            href={`http://localhost:3000/certificate/${data.issuerId}/${data.courseId}/${data.courseTemplate}/?&issuerId=${data.issuerId}&displayName=${data.displayName}&courseId=${data.courseId}&courseName=${data.courseName}&date=${data.completed}&email=${data.email}`}
           >
-          {`http://localhost:3000/certification/${issuerId}/${courseId}`}
-        </Link>
+            View Certificate
+            {/* {`http://localhost:3000/certification/${issuerId}/${courseId}`} */}
+          </Link>
+        ) : (
+          <></>
+        )}
+
+        {/* <Link href={`${url}`}>{url}</Link> */}
       </form>
     </div>
   );
