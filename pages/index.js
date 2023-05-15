@@ -132,24 +132,6 @@ export default function Signup() {
           </div>
         </div>
       </div>
-<<<<<<< HEAD
-
-      <button type="submit" className={styles.signup_button} >
-        Sign Up
-      </button>
-
-      <p className={styles.text}>
-        Already have an account?{' '}
-        <Link href="/login">
-          {/* <a className={styles.link}>Log In</a> */}
-        </Link>
-      </p>
-    </form>
-  </main>
-</div>
-  )}
-=======
     </div>
   );
 }
->>>>>>> 82e93d31e6421a5a13fb69807db8518552870cea
