@@ -1,13 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import styles from "../styles/Signup.module.css";
 import Draggable from "react-draggable";
-import axios from 'axios';
-import Login from "./login";
-import OrgSignup from "./signup";
+import axios from "axios";
 
-export default function Index() {
+export default function Certificate() {
+  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [courses, setCourses] = useState("");
+  const [completed, setCompleted] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [username, setusername] = useState();
+  // const [issuer, setissuer] = useState();
+  const [belt, setbelt] = useState();
+  const [date, setdate] = useState();
+  const [email, setEmail] = useState("");
+  const [userid, setuserid] = useState("");
+
+  const issuer = "Six Sigma";
+  const beltid = "000";
+
+  const uid = localStorage.getItem("uid");
+
+  useEffect(() => {
+    try {
+      const response = axios
+        .get(`http://localhost:5000/dashboard/${uid}`)
+        .then((res) => {
+          console.log("data", res.data);
+          setusername(res.data.name);
+          setbelt(res.data.courses);
+          setdate(res.data.completed);
+
+        });
+      console.log("response", response);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
 
   return (
@@ -52,6 +83,7 @@ export default function Index() {
               <a
                 href={`http://localhost:3000/issuer/groups/create/preview/?id=${userid}&username=${username}&beltid=${beltid}&belt=${belt}&date=${date}&email=${email}`}
                 target="_blank"
+                // onClick={}
               >
                 Claim Certificate
               </a>

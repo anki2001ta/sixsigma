@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const cookieParser = require('cookie-parser');
 router.use(cookieParser())
@@ -80,7 +80,6 @@ router.post('/signup', (req, res) => {
       console.log('Error creating user:', error);
       res.status(500).send({ message: 'Error creating user' });
     });
-  
 });
 
 
