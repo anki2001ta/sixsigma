@@ -18,6 +18,4 @@ const auth = (req,res,next) =>{
         res.status(400).send({"message" : "User Not Found, Try Logging In"})
     }
 }
-module.exports = {
-    auth
-}
+module.exports = auth

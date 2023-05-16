@@ -3,8 +3,8 @@ const env=require("dotenv")
 env.config()
 const app=express()
 const connectDB=require("./Config/credDB")
-const authenticateRoute=require("./Middleware/Authentication.middleware")
-const {auth}=require("./Middleware/Authentication.middleware")
+const authenticateRoute=require("./Routes/userRoute")
+const auth=require("./Middleware/Authentication.middleware")
 const cors=require("cors");
 app.use(express.json())
 app.use(
@@ -14,14 +14,10 @@ app.use(
 )
 
 
-app.use(auth)
+
 app.use("/",authenticateRoute)
+app.use(auth)
 
-
-app.get("/get",((req,res)=>{
-  res.send("user")
-})
-)
  
 //connect database
 app.listen(process.env.port,async()=>{

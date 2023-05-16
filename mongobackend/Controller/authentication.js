@@ -3,9 +3,9 @@ env.config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const OrganizationModel = require("../Models/organization.model");
-const IndividualUserModel = require("../Models/individualUser.model");
+//const IndividualUserModel = require("../Models/individualUser.model");
 
-;
+
 
 const organizationSignup = async (req, res) => {
   try {
@@ -19,7 +19,7 @@ const organizationSignup = async (req, res) => {
         }
         req.body.password = hash;
         req.body.administration = false;
-        await UserModel.create(req.body);
+        await OrganizationModel.create(req.body);
         res.status(200).send({ msg: "User registered Successfully" });
       });
     }
