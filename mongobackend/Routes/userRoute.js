@@ -5,8 +5,6 @@ const {organizationLogin,organizationSignup}=require("../Controller/authenticati
 // Organization Signup route
 router.post("/organization/signup",organizationSignup);
 
-
-
 // Organization Login route
 router.post("/organization/login",organizationLogin);
 

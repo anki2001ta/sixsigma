@@ -4,6 +4,7 @@ env.config()
 const app=express()
 const connectDB=require("./Config/credDB")
 const authenticateRoute=require("./Routes/userRoute")
+const certificateCredentialRoute=require("./Routes/organization.Route")
 const auth=require("./Middleware/Authentication.middleware")
 const cors=require("cors");
 app.use(express.json())
@@ -16,6 +17,7 @@ app.use(
 
 
 app.use("/",authenticateRoute)
+app.use("/",certificateCredentialRoute)
 app.use(auth)
 
  

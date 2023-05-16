@@ -26,5 +26,6 @@ const organizationSchema=mongoose.Schema({
     }
   
 })
+
 const organizationModel=mongoose.model("organizationCollection",organizationSchema);
 module.exports=organizationModel;
