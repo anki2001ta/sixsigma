@@ -27,6 +27,9 @@ const setCredendialAttributes = (req, res) => {
 };
 
 
-module.exports = {
-  setCredendialAttributes
-};
+
+
+const PostJob=async(req,res)=>{
+  console.log("welcome")
+}
+module.exports=PostJob
